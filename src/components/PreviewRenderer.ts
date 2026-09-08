@@ -25,6 +25,7 @@ export class PreviewRenderer {
     this.renderNumberedList('pv-material-list', state.materials);
     this.renderNumberedList('pv-body-list', state.body);
     this.renderNumberedList('pv-panel-list', state.panel);
+    this.renderNumberedList('pv-labour-list', state.labourCharges);
 
     // Letterhead visibility handling
     const header = document.getElementById('pv-header');

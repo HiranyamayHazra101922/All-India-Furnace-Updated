@@ -16,14 +16,15 @@ const defaultState: QuotationState = {
   ],
   body: [
     "M.S. Sheet", "M.S. Angle", "M.S. Pati", "Top Plate", 
-    "Door Arrangement", "Nut/Bolt/Washer", "Labour charges", "Revolving Wheel"
+    "Door Arrangement", "Nut/Bolt/Washer", "Revolving Wheel"
   ],
   panel: [
     "M.S.Panel Box Body", "Amp. Meter", "Volt Meter", "Digital Meter", 
     "Indicating Lamp", "Toggle Switch", "Thermo couple SS:310", 
     "Compensating Cable", "SS Nut, Bolt & Washer", "Connecting Pol", 
-    "Panel Wiring Wire", "Labour charges"
+    "Panel Wiring Wire"
   ],
+  labourCharges: ["Labour charges"],
   totalCost: 476900,
   costInWords: 'Rupees Four Lakh Seventy Six Thousand Nine Hundred only',
   deliveryTerms: 'After 35 days from the receipt your order copy',
@@ -37,7 +38,14 @@ class Store {
 
   constructor() {
     const persisted = localStorage.getItem(STORAGE_KEY);
-    this.state = persisted ? JSON.parse(persisted) : defaultState;
+    const savedState = persisted ? JSON.parse(persisted) : {};
+    this.state = {
+      ...defaultState,
+      ...savedState,
+      labourCharges: savedState.labourCharges ?? ['Labour charges'],
+      body: (savedState.body ?? defaultState.body).filter((item: string) => item.toLowerCase() !== 'labour charges'),
+      panel: (savedState.panel ?? defaultState.panel).filter((item: string) => item.toLowerCase() !== 'labour charges'),
+    };
   }
 
   public getState(): QuotationState {

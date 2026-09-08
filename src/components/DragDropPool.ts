@@ -16,6 +16,7 @@ export class DragDropPool {
     material: document.getElementById('dropzone-material') as HTMLElement,
     body: document.getElementById('dropzone-body') as HTMLElement,
     panel: document.getElementById('dropzone-panel') as HTMLElement,
+    labour: document.getElementById('dropzone-labour') as HTMLElement,
   };
 
   constructor() {
@@ -119,6 +120,7 @@ export class DragDropPool {
     document.getElementById('clear-material')?.addEventListener('click', () => appStore.setState({ materials: [] }));
     document.getElementById('clear-body')?.addEventListener('click', () => appStore.setState({ body: [] }));
     document.getElementById('clear-panel')?.addEventListener('click', () => appStore.setState({ panel: [] }));
+    document.getElementById('clear-labour')?.addEventListener('click', () => appStore.setState({ labourCharges: [] }));
   }
 
   private addItem(category: Category, itemName: string) {
@@ -126,6 +128,7 @@ export class DragDropPool {
     if (category === 'material') appStore.setState({ materials: [...current.materials, itemName] });
     if (category === 'body') appStore.setState({ body: [...current.body, itemName] });
     if (category === 'panel') appStore.setState({ panel: [...current.panel, itemName] });
+    if (category === 'labour') appStore.setState({ labourCharges: [...current.labourCharges, itemName] });
   }
 
   private removeItem(category: Category, index: number) {
@@ -142,7 +145,30 @@ export class DragDropPool {
       const list = [...current.panel];
       list.splice(index, 1);
       appStore.setState({ panel: list });
+    } else if (category === 'labour') {
+      const list = [...current.labourCharges];
+      list.splice(index, 1);
+      appStore.setState({ labourCharges: list });
     }
+  }
+
+  private moveItem(category: Category, index: number, requestedPosition: number) {
+    const current = appStore.getState();
+    const lists: Record<Category, string[]> = {
+      material: [...current.materials],
+      body: [...current.body],
+      panel: [...current.panel],
+      labour: [...current.labourCharges],
+    };
+    const list = lists[category];
+    const [item] = list.splice(index, 1);
+    const position = Math.min(Math.max(Math.round(requestedPosition) || 1, 1), list.length + 1);
+    list.splice(position - 1, 0, item);
+
+    if (category === 'material') appStore.setState({ materials: list });
+    if (category === 'body') appStore.setState({ body: list });
+    if (category === 'panel') appStore.setState({ panel: list });
+    if (category === 'labour') appStore.setState({ labourCharges: list });
   }
 
   private renderActiveItems() {
@@ -154,10 +180,15 @@ export class DragDropPool {
         const itemEl = document.createElement('div');
         itemEl.className = 'bg-slate-50 border border-slate-300 text-[10px] px-2 py-0.5 rounded flex justify-between items-center';
         itemEl.innerHTML = `
-          <span><b class="text-slate-400 mr-1">${String(idx + 1).padStart(2, '0')}</b> ${name}</span>
+          <span class="min-w-0 truncate"><b class="text-slate-400 mr-1">${String(idx + 1).padStart(2, '0')}</b> ${name}</span>
+          <input type="number" min="1" max="${list.length}" value="${idx + 1}" title="Position" aria-label="Position for ${name}" class="item-position w-10 text-center text-[10px] border border-slate-300 rounded px-1 py-0.5 ml-1">
           <button class="text-red-400 hover:text-red-600 font-bold ml-1 text-xs leading-none">&times;</button>
         `;
         itemEl.querySelector('button')?.addEventListener('click', () => this.removeItem(cat, idx));
+        itemEl.querySelector('input')?.addEventListener('change', (event) => {
+          const position = Number((event.target as HTMLInputElement).value);
+          this.moveItem(cat, idx, position);
+        });
         zone.appendChild(itemEl);
       });
     };
@@ -165,5 +196,6 @@ export class DragDropPool {
     renderList('material', state.materials);
     renderList('body', state.body);
     renderList('panel', state.panel);
+    renderList('labour', state.labourCharges);
   }
 }

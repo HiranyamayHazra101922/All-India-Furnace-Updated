@@ -241,6 +241,8 @@ export async function generateWordDocument(state: QuotationState): Promise<void>
               children: [
                 new Paragraph({ children: [new TextRun({ text: 'BODY.', bold: true, font: 'Times New Roman', size: 22 })], spacing: { after: 40 } }),
                 ...formatList(state.body),
+                new Paragraph({ children: [new TextRun({ text: 'LABOUR CHARGES', bold: true, font: 'Times New Roman', size: 22 })], spacing: { before: 80, after: 40 } }),
+                ...formatList(state.labourCharges),
               ],
             }),
             // Col 3: Commercials

@@ -75,7 +75,7 @@
             <section class="border border-slate-200 rounded-lg p-4 bg-slate-50 space-y-3">
                 <div class="flex justify-between items-center">
                     <h2 class="font-bold text-slate-700 text-xs uppercase tracking-wider">2. Element Configuration</h2>
-                    <span class="text-[10px] text-slate-500">Drag or click to assign</span>
+                    <span class="text-[10px] text-slate-500">Drag/click to assign; edit position to reorder</span>
                 </div>
 
                 <div class="relative">
@@ -93,12 +93,13 @@
             <option value="material">Material</option>
             <option value="body">Body</option>
             <option value="panel">Panel</option>
+            <option value="labour">Labour Charges</option>
           </select>
                     <button id="btn-add-custom" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded font-medium transition w-full sm:w-auto">Add</button>
                 </div>
 
                 <!-- Target Dropzones -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                     <div class="bg-white p-2.5 rounded border border-slate-200 flex flex-col">
                         <div class="flex justify-between items-center mb-1.5">
                             <span class="text-[11px] font-bold text-slate-700">Material Description</span>
@@ -121,6 +122,14 @@
                             <button id="clear-panel" class="text-[10px] text-red-500 hover:underline">Clear</button>
                         </div>
                         <div id="dropzone-panel" data-category="panel" class="dropzone flex-1 border-2 border-dashed border-slate-300 rounded p-1 flex flex-col gap-1 overflow-y-auto max-h-44"></div>
+                    </div>
+
+                    <div class="bg-white p-2.5 rounded border border-slate-200 flex flex-col">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-[11px] font-bold text-slate-700">LABOUR CHARGES</span>
+                            <button id="clear-labour" class="text-[10px] text-red-500 hover:underline">Clear</button>
+                        </div>
+                        <div id="dropzone-labour" data-category="labour" class="dropzone flex-1 border-2 border-dashed border-slate-300 rounded p-1 flex flex-col gap-1 overflow-y-auto max-h-44"></div>
                     </div>
                 </div>
             </section>
@@ -250,6 +259,8 @@
                                 <td class="w-[28%] align-top px-3 border-r border-slate-300">
                                     <p class="font-bold mb-1.5 text-[13.5px]">BODY.</p>
                                     <div id="pv-body-list" class="space-y-1"></div>
+                                    <p class="font-bold mt-3 mb-1.5 text-[13.5px]">LABOUR CHARGES</p>
+                                    <div id="pv-labour-list" class="space-y-1"></div>
                                 </td>
 
                                 <!-- Column 3: Commercials & Terms (37%) -->

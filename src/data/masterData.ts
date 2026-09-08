@@ -21,7 +21,6 @@ export const MASTER_ITEMS: ComponentItem[] = [
   { id: "b4", name: "Top Plate", defaultCategory: "body" },
   { id: "b5", name: "Door Arrangement", defaultCategory: "body" },
   { id: "b6", name: "Nut/Bolt/Washer", defaultCategory: "body" },
-  { id: "b7", name: "Labour charges", defaultCategory: "body" },
   { id: "b8", name: "Revolving Wheel", defaultCategory: "body" },
 
   // Panel
@@ -36,5 +35,7 @@ export const MASTER_ITEMS: ComponentItem[] = [
   { id: "p9", name: "SS Nut, Bolt & Washer", defaultCategory: "panel" },
   { id: "p10", name: "Connecting Pol", defaultCategory: "panel" },
   { id: "p11", name: "Panel Wiring Wire", defaultCategory: "panel" },
-  { id: "p12", name: "Labour charges", defaultCategory: "panel" }
+
+  // Labour
+  { id: "l1", name: "Labour charges", defaultCategory: "labour" }
 ];

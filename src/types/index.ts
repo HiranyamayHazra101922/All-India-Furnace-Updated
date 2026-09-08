@@ -1,4 +1,4 @@
-export type Category = 'material' | 'body' | 'panel';
+export type Category = 'material' | 'body' | 'panel' | 'labour';
 
 export interface ComponentItem {
   id: string;
@@ -15,6 +15,7 @@ export interface QuotationState {
   materials: string[];
   body: string[];
   panel: string[];
+  labourCharges: string[];
   totalCost: number;
   costInWords: string;
   deliveryTerms: string;
