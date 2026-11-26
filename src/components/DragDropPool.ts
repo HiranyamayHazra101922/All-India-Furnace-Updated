@@ -181,13 +181,24 @@ export class DragDropPool {
         itemEl.className = 'bg-slate-50 border border-slate-300 text-[10px] px-2 py-0.5 rounded flex justify-between items-center';
         itemEl.innerHTML = `
           <span class="min-w-0 truncate"><b class="text-slate-400 mr-1">${String(idx + 1).padStart(2, '0')}</b> ${name}</span>
+          ${`<input type="number" min="0" step="0.01" value="${state.itemPrices[cat][name] ?? ''}" placeholder="₹ Price" title="Price for ${name}" aria-label="Price for ${name}" class="item-price w-20 text-[10px] border border-slate-300 rounded px-1 py-0.5 ml-1">`}
           <input type="number" min="1" max="${list.length}" value="${idx + 1}" title="Position" aria-label="Position for ${name}" class="item-position w-10 text-center text-[10px] border border-slate-300 rounded px-1 py-0.5 ml-1">
           <button class="text-red-400 hover:text-red-600 font-bold ml-1 text-xs leading-none">&times;</button>
         `;
         itemEl.querySelector('button')?.addEventListener('click', () => this.removeItem(cat, idx));
-        itemEl.querySelector('input')?.addEventListener('change', (event) => {
+        itemEl.querySelector('.item-position')?.addEventListener('change', (event) => {
           const position = Number((event.target as HTMLInputElement).value);
           this.moveItem(cat, idx, position);
+        });
+        itemEl.querySelector('.item-price')?.addEventListener('input', (event) => {
+          const price = parseFloat((event.target as HTMLInputElement).value) || 0;
+          const current = appStore.getState();
+          appStore.setState({
+            itemPrices: {
+              ...current.itemPrices,
+              [cat]: { ...current.itemPrices[cat], [name]: price }
+            }
+          });
         });
         zone.appendChild(itemEl);
       });

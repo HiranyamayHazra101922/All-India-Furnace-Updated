@@ -13,6 +13,7 @@ export interface QuotationState {
   subject: string;
   sizeSpecification: string;
   materials: string[];
+  itemPrices: Record<Category, Record<string, number>>;
   body: string[];
   panel: string[];
   labourCharges: string[];

@@ -49,6 +49,32 @@ export async function generateWordDocument(state: QuotationState): Promise<void>
       })
     );
 
+  const formatMaterialList = (items: string[], prices: Record<string, number>) =>
+    items.map((item, idx) => {
+      const price = prices[item] ?? 0;
+      return new Paragraph({
+        children: [
+          new TextRun({ text: `${String(idx + 1).padStart(2, '0')}) `, font: 'Times New Roman', size: 21, color: '444444' }),
+          new TextRun({ text: item, font: 'Times New Roman', size: 21 }),
+          ...(price > 0 ? [new TextRun({ text: `  Rs. ${price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, font: 'Times New Roman', size: 21 })] : []),
+        ],
+        spacing: { before: 20, after: 20 },
+      });
+    });
+
+  const formatPricedList = (items: string[], prices: Record<string, number>) =>
+    items.map((item, idx) => {
+      const price = prices[item] ?? 0;
+      return new Paragraph({
+        children: [
+          new TextRun({ text: `${String(idx + 1).padStart(2, '0')}) `, font: 'Times New Roman', size: 21, color: '444444' }),
+          new TextRun({ text: item, font: 'Times New Roman', size: 21 }),
+          ...(price > 0 ? [new TextRun({ text: `  Rs. ${price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, font: 'Times New Roman', size: 21 })] : []),
+        ],
+        spacing: { before: 20, after: 20 },
+      });
+    });
+
   const documentChildren: (Paragraph | Table)[] = [];
 
   // Quotation Label
@@ -228,9 +254,9 @@ export async function generateWordDocument(state: QuotationState): Promise<void>
               margins: { top: 40, bottom: 40, left: 30, right: 30 },
               children: [
                 new Paragraph({ children: [new TextRun({ text: 'Material Description', bold: true, font: 'Times New Roman', size: 22 })], spacing: { after: 40 } }),
-                ...formatList(state.materials),
+                ...formatPricedList(state.materials, state.itemPrices.material),
                 new Paragraph({ children: [new TextRun({ text: 'PANEL', bold: true, font: 'Times New Roman', size: 22 })], spacing: { before: 80, after: 40 } }),
-                ...formatList(state.panel),
+                ...formatPricedList(state.panel, state.itemPrices.panel),
               ],
             }),
             // Col 2: Body
@@ -242,7 +268,7 @@ export async function generateWordDocument(state: QuotationState): Promise<void>
                 new Paragraph({ children: [new TextRun({ text: 'BODY.', bold: true, font: 'Times New Roman', size: 22 })], spacing: { after: 40 } }),
                 ...formatList(state.body),
                 new Paragraph({ children: [new TextRun({ text: 'LABOUR CHARGES', bold: true, font: 'Times New Roman', size: 22 })], spacing: { before: 80, after: 40 } }),
-                ...formatList(state.labourCharges),
+                ...formatPricedList(state.labourCharges, state.itemPrices.labour),
               ],
             }),
             // Col 3: Commercials

@@ -22,10 +22,10 @@ export class PreviewRenderer {
     (document.getElementById('pv-payment') as HTMLElement).innerText = state.paymentTerms;
 
     // Render columns
-    this.renderNumberedList('pv-material-list', state.materials);
-    this.renderNumberedList('pv-body-list', state.body);
-    this.renderNumberedList('pv-panel-list', state.panel);
-    this.renderNumberedList('pv-labour-list', state.labourCharges);
+    this.renderPricedList('pv-material-list', state.materials, state.itemPrices.material);
+    this.renderPricedList('pv-body-list', state.body, state.itemPrices.body);
+    this.renderPricedList('pv-panel-list', state.panel, state.itemPrices.panel);
+    this.renderPricedList('pv-labour-list', state.labourCharges, state.itemPrices.labour);
 
     // Letterhead visibility handling
     const header = document.getElementById('pv-header');
@@ -48,6 +48,38 @@ export class PreviewRenderer {
           <span>${item}</span>
         </div>
       `)
+      .join('');
+  }
+
+  private renderMaterialList(materials: string[], materialPrices: Record<string, number>) {
+    const container = document.getElementById('pv-material-list') as HTMLElement;
+    container.innerHTML = materials
+      .map((material, idx) => {
+        const price = materialPrices[material] ?? 0;
+        return `
+        <div class="flex justify-between gap-2">
+          <span class="w-5 shrink-0 text-slate-500 font-mono">${String(idx + 1).padStart(2, '0')})</span>
+          <span class="flex-1">${material}</span>
+          ${price > 0 ? `<span class="shrink-0">₹${price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>` : ''}
+        </div>
+      `;
+      })
+      .join('');
+  }
+
+  private renderPricedList(elementId: string, items: string[], itemPrices: Record<string, number>) {
+    const container = document.getElementById(elementId) as HTMLElement;
+    container.innerHTML = items
+      .map((item, idx) => {
+        const price = itemPrices[item] ?? 0;
+        return `
+        <div class="flex justify-between gap-2">
+          <span class="w-5 shrink-0 text-slate-500 font-mono">${String(idx + 1).padStart(2, '0')})</span>
+          <span class="flex-1">${item}</span>
+          ${price > 0 ? `<span class="shrink-0">₹${price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>` : ''}
+        </div>
+      `;
+      })
       .join('');
   }
 }

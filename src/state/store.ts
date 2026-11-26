@@ -29,7 +29,13 @@ const defaultState: QuotationState = {
   costInWords: 'Rupees Four Lakh Seventy Six Thousand Nine Hundred only',
   deliveryTerms: 'After 35 days from the receipt your order copy',
   paymentTerms: 'a) 50% advance.\nb) 25% payment within working period\nc) Balance 25% after completion of Job.',
-  blankLetterheadMode: false
+  blankLetterheadMode: false,
+  itemPrices: {
+    material: {},
+    body: {},
+    panel: {},
+    labour: {}
+  }
 };
 
 class Store {
@@ -42,9 +48,16 @@ class Store {
     this.state = {
       ...defaultState,
       ...savedState,
+      itemPrices: {
+        material: savedState.itemPrices?.material ?? savedState.materialPrices ?? {},
+        body: savedState.itemPrices?.body ?? {},
+        panel: savedState.itemPrices?.panel ?? {},
+        labour: savedState.itemPrices?.labour ?? savedState.labourPrices ?? {}
+      },
       labourCharges: savedState.labourCharges ?? ['Labour charges'],
+      materials: (savedState.materials ?? defaultState.materials).filter((item: string) => item.toLowerCase() !== 'digital temperature controller'),
       body: (savedState.body ?? defaultState.body).filter((item: string) => item.toLowerCase() !== 'labour charges'),
-      panel: (savedState.panel ?? defaultState.panel).filter((item: string) => item.toLowerCase() !== 'labour charges'),
+      panel: (savedState.panel ?? defaultState.panel).filter((item: string) => !['labour charges', 'digital temperature controller'].includes(item.toLowerCase())),
     };
   }
 
